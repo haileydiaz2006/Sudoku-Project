@@ -11,6 +11,8 @@ class SudokuGenerator:
         self.Solution = None
 
         self.fill_values()
+        self.Solution = deepcopy(self.board)
+        self.remove_cells()
         self.initial_board = deepcopy(self.board)
 
     def get_board(self):
@@ -48,8 +50,8 @@ class SudokuGenerator:
         return True
 
     def is_valid(self, row, col, num):
-        return self.valid_in_row(row, num) and self.valid_in_col(col, num)
-        self.valid_in_box(row- row % self.SRN, col - col % self.SRN, num)
+        return (self.valid_in_row(row, num) and self.valid_in_col(col, num) and self.valid_in_box(row - row % self.SRN, col - col % self.SRN, num))
+
 
     def fill_box(self, row_start, col_start):
         nums = list(range(1, self.N + 1))
@@ -62,7 +64,7 @@ class SudokuGenerator:
 
     def fill_diagonal(self):
         for i in range(0, self.N, self.SRN):
-            self.fill_box(i, j)
+            self.fill_box(i, i)
 
     def find_empty_location(self):
         for i in range(self.N):

@@ -1,12 +1,13 @@
 import pygame
 
 class Cell:
-    def __init__(self, value, row, col, screen):
+    def __init__(self, value, row, col, size):
         self.value = value
         self.sketched_value = 0
+        self.original_value = value
         self.row = row
         self.col = col
-        self.screen = screen
+        self.size = size
         self.selected = False
         self.cell_size = 60
 
@@ -16,30 +17,21 @@ class Cell:
     def set_sketched_value(self, value):
         self.sketched_value = value
 
-    def draw(self):
-        x = self.col * self.cell_size
-        y = self.row * self.cell_size
-        if self.selected:
-            outline_color = (255, 0, 0)
-            outline_width = 3
-        else:
-            outline_color = (0, 0, 0)
-            outline_width = 1
-
-        pygame.draw.rect(self.screen, (255, 255, 255), (x, y, self.cell_size, self.cell_size))
-        pygame.draw.rect(self.screen, outline_color, (x, y, self.cell_size, self.cell_size), outline_width)
-
-        value_font = pygame.font.SysFont("arial", 36)
-        value_font = pygame.font.SysFont("arial", 20)
+    def draw(self, surface):
+        x = self.col * self.size
+        y = self.row * self.size
+        font = pygame.font.Font(None, 40)
 
         if self.value != 0:
-            text = value_font.render(str(self.value), True, (0, 0, 0))
-            text_rect = text.get_rect(center=(x + self.cell_size // 2, y + self.cell_size // 2))
-            self.screen.blit(text, text_rect)
-
+            text = font.render(str(self.value), True, (0, 0, 0))
+            surface.blit(text, (x + self.size // 3, y + self.size // 4))
         elif self.sketched_value != 0:
-            sketch = sketch_font.render(str(self.sketched_value), True, (128, 128, 128))
-            self.screen.blit(sketch, (x + 5, y + 5))
+            small_font = pygame.font.Font(None, 20)
+            text= small_font.render(str(self.sketched_value), True, (150, 150, 150))
+            surface.blit(text, (x + 5 , y + 5))
+
+        if self.selected:
+            pygame.draw.rect(surface, (255, 0, 0), (x, y, self.size, self.size), 3)
 
 
 
